@@ -18,7 +18,7 @@ public class SocketTask {
 
     @MessageMapping("/hello")
     public void greeting(Request request) throws Exception {
-        String url2 = "/topic/greetings/"+"5";
+        String url2 = "/topic/chat/"+"5";
         Thread.sleep(1000);
         this.template.convertAndSend(url2, request);
     }
