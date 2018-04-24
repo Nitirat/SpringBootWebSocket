@@ -1,4 +1,15 @@
 var stompClient = null;
+var room = null;
+
+function testRoom1(){
+    room = "1";
+    connect();
+}
+
+function testRoom2(){
+    room = "2";
+    connect();
+}
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -18,7 +29,7 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/chat/5', function (greeting) {
+        stompClient.subscribe('/topic/chat/'+room, function (greeting) {
             showGreeting(JSON.parse(greeting.body).name);
         });
     });
@@ -33,7 +44,7 @@ function disconnect() {
 }
 
 function sendName() {
-    stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
+    stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val(), 'room': room}));
 }
 
 function showGreeting(message) {
@@ -44,7 +55,8 @@ $(function () {
     $("form").on('submit', function (e) {
         e.preventDefault();
     });
-    $( "#connect" ).click(function() { connect(); });
+    $( "#connect1" ).click(function() { testRoom1(); });
+    $( "#connect2" ).click(function() { testRoom2(); });
     $( "#disconnect" ).click(function() { disconnect(); });
     $( "#send" ).click(function() { sendName(); });
 });
